@@ -6,7 +6,7 @@ type Props = {
   query: string;
   centuries: string[];
   allCenturies: number[];
-  handleGenderChang: (gen: string) => void;
+  handleGenderChange: (gen: string) => void;
   handleQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleCenturyChange: (number: number) => void;
   clearCenturies: () => void;
@@ -17,7 +17,7 @@ export const PeopleFilters: React.FC<Props> = ({
   query,
   centuries,
   allCenturies,
-  handleGenderChang,
+  handleGenderChange,
   handleQueryChange,
   handleCenturyChange,
   clearCenturies,
@@ -32,7 +32,7 @@ export const PeopleFilters: React.FC<Props> = ({
           to="#"
           onClick={e => {
             e.preventDefault();
-            handleGenderChang('');
+            handleGenderChange('');
           }}
         >
           All
@@ -42,7 +42,7 @@ export const PeopleFilters: React.FC<Props> = ({
           to="#"
           onClick={e => {
             e.preventDefault();
-            handleGenderChang('m');
+            handleGenderChange('m');
           }}
         >
           Male
@@ -52,7 +52,7 @@ export const PeopleFilters: React.FC<Props> = ({
           to="#"
           onClick={e => {
             e.preventDefault();
-            handleGenderChang('f');
+            handleGenderChange('f');
           }}
         >
           Female

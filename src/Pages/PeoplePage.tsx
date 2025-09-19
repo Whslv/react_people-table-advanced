@@ -22,7 +22,11 @@ export const PeoplePage = () => {
 
   const allCenturies = [16, 17, 18, 19, 20];
 
-  function handleGenderChang(gen: string) {
+  function normalized(data: string) {
+    return data.toString().toLowerCase();
+  }
+
+  function handleGenderChange(gen: string) {
     const params = new URLSearchParams(searchParams);
 
     params.set('sex', gen);
@@ -31,6 +35,11 @@ export const PeoplePage = () => {
 
   function handleQueryChange(event: React.ChangeEvent<HTMLInputElement>) {
     const params = new URLSearchParams(searchParams);
+    const value = normalized(event.target.value);
+
+    if (!value) {
+      params.delete('query');
+    }
 
     params.set('query', event.target.value);
     setSearchParams(params);
@@ -80,12 +89,15 @@ export const PeoplePage = () => {
       return false;
     }
 
-    if (query && !person.name.toLowerCase().includes(query)) {
+    if (
+      normalized(query) &&
+      !person.name.toLowerCase().includes(normalized(query))
+    ) {
       return false;
     }
 
     if (centuries && centuries.length > 0) {
-      const c = Math.floor(person.born / 100);
+      const c = Math.ceil(person.born / 100);
 
       if (!centuries.includes(`${c}`)) {
         return false;
@@ -112,13 +124,13 @@ export const PeoplePage = () => {
 
       case 'born':
         return order === 'desc'
-          ? person1.born - person2.born
-          : person2.born - person1.born;
+          ? person2.born - person1.born
+          : person1.born - person2.born;
 
       case 'died':
         return order === 'desc'
-          ? person1.born - person2.born
-          : person2.born - person1.born;
+          ? person1.died - person2.died
+          : person2.died - person1.died;
 
       default:
         return 0;
@@ -155,7 +167,7 @@ export const PeoplePage = () => {
                 query={query}
                 centuries={centuries}
                 allCenturies={allCenturies}
-                handleGenderChang={handleGenderChang}
+                handleGenderChange={handleGenderChange}
                 handleQueryChange={handleQueryChange}
                 handleCenturyChange={handleCenturyChange}
                 clearCenturies={clearCenturies}
