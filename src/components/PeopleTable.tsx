@@ -2,7 +2,6 @@ import React from 'react';
 import { PersonLink } from '../components/PersonLink';
 import classNames from 'classnames';
 import { Person } from '../types';
-import { Link } from 'react-router-dom';
 
 interface Props {
   people: Person[];
@@ -22,68 +21,64 @@ export const PeopleTable: React.FC<Props> = ({ people, slug, handleSort }) => {
             <th>
               <span className="is-flex is-flex-wrap-nowrap">
                 Name
-                <Link
-                  to="#"
-                  onClick={e => {
-                    e.preventDefault();
+                <button
+                  type="button"
+                  onClick={() => {
                     handleSort('name');
                   }}
                 >
                   <span className="icon">
                     <i className="fas fa-sort" />
                   </span>
-                </Link>
+                </button>
               </span>
             </th>
 
             <th>
               <span className="is-flex is-flex-wrap-nowrap">
                 Sex
-                <Link
-                  to="#"
-                  onClick={e => {
-                    e.preventDefault();
+                <button
+                  type="button"
+                  onClick={() => {
                     handleSort('sex');
                   }}
                 >
                   <span className="icon">
                     <i className="fas fa-sort" />
                   </span>
-                </Link>
+                </button>
               </span>
             </th>
 
             <th>
               <span className="is-flex is-flex-wrap-nowrap">
                 Born
-                <Link
-                  to="#"
-                  onClick={e => {
-                    e.preventDefault();
+                <button
+                  type="button"
+                  onClick={() => {
                     handleSort('born');
                   }}
                 >
                   <span className="icon">
                     <i className="fas fa-sort" />
                   </span>
-                </Link>
+                </button>
               </span>
             </th>
 
             <th>
               <span className="is-flex is-flex-wrap-nowrap">
                 Died
-                <Link
-                  to="#"
-                  onClick={e => {
-                    e.preventDefault();
+                <button
+                  type="button"
+                  onClick={() => {
                     handleSort('died');
                   }}
                 >
                   <span className="icon">
                     <i className="fas fa-sort" />
                   </span>
-                </Link>
+                </button>
               </span>
             </th>
             <th>Mother</th>
@@ -113,7 +108,7 @@ export const PeopleTable: React.FC<Props> = ({ people, slug, handleSort }) => {
                 </td>
 
                 <td>
-                  <a href="">{person.sex}</a>
+                  <span>{person.sex}</span>
                 </td>
                 <td>{person.born}</td>
                 <td>{person.died}</td>

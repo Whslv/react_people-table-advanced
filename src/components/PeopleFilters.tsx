@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import type { ChangeEvent } from 'react';
 
 type Props = {
   sex: string;
@@ -7,9 +7,10 @@ type Props = {
   centuries: string[];
   allCenturies: number[];
   handleGenderChange: (gen: string) => void;
-  handleQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleQueryChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleCenturyChange: (number: number) => void;
   clearCenturies: () => void;
+  resetAll: () => void;
 };
 
 export const PeopleFilters: React.FC<Props> = ({
@@ -21,42 +22,34 @@ export const PeopleFilters: React.FC<Props> = ({
   handleQueryChange,
   handleCenturyChange,
   clearCenturies,
+  resetAll,
 }) => {
   return (
     <nav className="panel">
       <p className="panel-heading">Filters</p>
 
       <p className="panel-tabs" data-cy="SexFilter">
-        <Link
+        <button
+          type="button"
           className={classNames(sex === '' ? 'is-active' : '')}
-          to="#"
-          onClick={e => {
-            e.preventDefault();
-            handleGenderChange('');
-          }}
+          onClick={() => handleGenderChange('')}
         >
           All
-        </Link>
-        <Link
+        </button>
+        <button
+          type="button"
           className={classNames(sex === 'm' ? 'is-active' : '')}
-          to="#"
-          onClick={e => {
-            e.preventDefault();
-            handleGenderChange('m');
-          }}
+          onClick={() => handleGenderChange('m')}
         >
           Male
-        </Link>
-        <Link
+        </button>
+        <button
+          type="button"
           className={classNames(sex === 'f' ? 'is-active' : '')}
-          to="#"
-          onClick={e => {
-            e.preventDefault();
-            handleGenderChange('f');
-          }}
+          onClick={() => handleGenderChange('f')}
         >
           Female
-        </Link>
+        </button>
       </p>
 
       <div className="panel-block">
@@ -119,15 +112,16 @@ export const PeopleFilters: React.FC<Props> = ({
       </div>
 
       <div className="panel-block">
-        <a
+        <button
+          type="button"
           className="button is-link is-outlined is-fullwidth"
-          href="#/people"
           onClick={e => {
             e.preventDefault();
+            resetAll();
           }}
         >
           Reset all filters
-        </a>
+        </button>
       </div>
     </nav>
   );

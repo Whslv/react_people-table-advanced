@@ -1,7 +1,9 @@
 import classNames from 'classnames';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 export const Navbar = () => {
+  const location = useLocation();
+
   return (
     <nav
       data-cy="nav"
@@ -17,7 +19,7 @@ export const Navbar = () => {
                 'has-background-grey-lighter': isActive,
               })
             }
-            to="/"
+            to={{ pathname: `/` }}
           >
             Home
           </NavLink>
@@ -29,7 +31,7 @@ export const Navbar = () => {
                 'has-background-grey-lighter': isActive,
               })
             }
-            to="/people"
+            to={{ pathname: `/people`, search: location.search }}
           >
             People
           </NavLink>

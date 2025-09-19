@@ -23,25 +23,31 @@ export const PeoplePage = () => {
   const allCenturies = [16, 17, 18, 19, 20];
 
   function normalized(data: string) {
-    return data.toString().toLowerCase();
+    return data.toString().trim().toLowerCase();
   }
 
   function handleGenderChange(gen: string) {
     const params = new URLSearchParams(searchParams);
 
-    params.set('sex', gen);
+    if (!gen) {
+      params.delete('sex');
+    } else {
+      params.set('sex', gen);
+    }
+
     setSearchParams(params);
   }
 
   function handleQueryChange(event: React.ChangeEvent<HTMLInputElement>) {
     const params = new URLSearchParams(searchParams);
-    const value = normalized(event.target.value);
+    const value = event.target.value;
 
-    if (!value) {
+    if (value.trim() === '' || !value.trim()) {
       params.delete('query');
+    } else {
+      params.set('query', event.target.value);
     }
 
-    params.set('query', event.target.value);
     setSearchParams(params);
   }
 
@@ -61,15 +67,25 @@ export const PeoplePage = () => {
   function handleSort(field: string) {
     const currentSort = searchParams.get('sort');
     const currentOrder = searchParams.get('order');
+    const validField =
+      field === 'name' ||
+      field === 'sex' ||
+      field === 'born' ||
+      field === 'died';
 
     const params = new URLSearchParams(searchParams);
 
-    if (currentSort !== field) {
-      params.set('sort', field);
-      params.delete('order');
-    } else if (!currentOrder) {
-      params.set('order', 'desc');
-    } else if (currentOrder === 'desc') {
+    if (validField) {
+      if (currentSort !== field) {
+        params.set('sort', field);
+        params.delete('order');
+      } else if (!currentOrder) {
+        params.set('order', 'desc');
+      } else if (currentOrder === 'desc') {
+        params.delete('sort');
+        params.delete('order');
+      }
+    } else {
       params.delete('sort');
       params.delete('order');
     }
@@ -84,14 +100,29 @@ export const PeoplePage = () => {
     setSearchParams(params);
   }
 
+  function resetAll() {
+    const newSearchParams = new URLSearchParams();
+
+    setSearchParams(newSearchParams);
+  }
+
   const filteredPeople = people.filter(person => {
-    if (sex && person.sex !== sex) {
+    const personSex = person.sex;
+    const personName = person.name;
+    const personMotherName = person.motherName;
+    const personFatherName = person.fatherName;
+
+    if (sex && personSex !== sex) {
       return false;
     }
 
     if (
       normalized(query) &&
-      !person.name.toLowerCase().includes(normalized(query))
+      !normalized(personName).includes(normalized(query)) &&
+      personMotherName &&
+      !normalized(personMotherName).includes(normalized(query)) &&
+      personFatherName &&
+      !normalized(personFatherName).includes(normalized(query))
     ) {
       return false;
     }
@@ -129,8 +160,8 @@ export const PeoplePage = () => {
 
       case 'died':
         return order === 'desc'
-          ? person1.died - person2.died
-          : person2.died - person1.died;
+          ? person2.died - person1.died
+          : person1.died - person2.died;
 
       default:
         return 0;
@@ -160,7 +191,7 @@ export const PeoplePage = () => {
 
       <div className="block">
         <div className="columns is-desktop is-flex-direction-row-reverse">
-          {!loader && (
+          {!loader && !errorMessage && (
             <div className="column is-7-tablet is-narrow-desktop">
               <PeopleFilters
                 sex={sex}
@@ -171,6 +202,7 @@ export const PeoplePage = () => {
                 handleQueryChange={handleQueryChange}
                 handleCenturyChange={handleCenturyChange}
                 clearCenturies={clearCenturies}
+                resetAll={resetAll}
               />
             </div>
           )}
